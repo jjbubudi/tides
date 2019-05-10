@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package api;
+
+import "google/protobuf/timestamp.proto";
+
+message TideRecorded {
+    google.protobuf.Timestamp timestamp = 1;
+    double meters = 2;
+}
+
+message TidePredicted {
+    google.protobuf.Timestamp timestamp = 1;
+    repeated Prediction predictions = 2;
+
+    message Prediction {
+        google.protobuf.Timestamp timestamp = 1;
+        double meters = 2;
+    }
+}
