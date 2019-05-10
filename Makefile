@@ -6,7 +6,7 @@ GENERATED_CODE = $(patsubst %.proto, %.pb.go, $(PROTO_FILES))
 
 .PHONY: build
 build: generate
-	@CGOENABLED=0 $(GO) build -o dist/tides cmd/main.go
+	@$(GO) build -o dist/tides cmd/main.go
 
 .PHONY: run
 run: generate
