@@ -1,0 +1,15 @@
+language: go
+sudo: required
+
+services:
+  - docker
+
+env:
+  global:
+    - GO111MODULE="on"
+
+go:
+  - 1.12.x
+
+script:
+  - make test
