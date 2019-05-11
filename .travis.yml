@@ -1,15 +1,45 @@
 language: go
 sudo: required
 
+branches:
+  only:
+  - master
+  - /^v\d+\.\d+\.\d+(-\S*)?$/
+
 services:
   - docker
 
 env:
   global:
-    - GO111MODULE="on"
+    - GO111MODULE=on
 
 go:
   - 1.12.x
 
-script:
-  - make test
+install:
+  - docker run --rm --privileged multiarch/qemu-user-static:register
+  - docker login -u "$DOCKER_USER" -p "$DOCKER_PASS"
+
+jobs:
+  include:
+    - stage: test
+      script: make ci
+
+    - stage: release
+      if: type = push OR tag IS present
+      script: make build-docker GOOS=linux GOARCH=amd64 PUSH=true
+
+    - stage: release
+      if: type = push OR tag IS present
+      script: make build-docker GOOS=linux GOARCH=arm64 PUSH=true
+
+    - stage: release
+      if: type = push OR tag IS present
+      script: make build-docker GOOS=linux GOARCH=arm GOARM=7 PUSH=true
+
+    - stage: manifest
+      if: type = push OR tag IS present
+      script: make push-manifest
+
+notifications:
+  email: false
