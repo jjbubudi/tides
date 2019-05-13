@@ -5,7 +5,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/timestamp"
-	"github.com/jjbubudi/tides/api"
+	"github.com/jjbubudi/protos-go/tides"
 	"github.com/jjbubudi/tides/pkg/observatory"
 )
 
@@ -39,8 +39,8 @@ func (s *Service) PublishRealTimeTidalData(when time.Time) error {
 		return err
 	}
 
-	event := &api.TideRecorded{
-		Timestamp: &timestamp.Timestamp{
+	event := &tides.TideRecorded{
+		Time: &timestamp.Timestamp{
 			Seconds: tidalData.Seconds,
 			Nanos:   int32(tidalData.Nanos),
 		},
@@ -62,10 +62,10 @@ func (s *Service) PublishTidalPredictions(when time.Time) error {
 		return err
 	}
 
-	var predictionsProto []*api.TidePredicted_Prediction
+	var predictionsProto []*tides.TidePredicted_Prediction
 	for _, prediction := range predictions {
-		predictionsProto = append(predictionsProto, &api.TidePredicted_Prediction{
-			Timestamp: &timestamp.Timestamp{
+		predictionsProto = append(predictionsProto, &tides.TidePredicted_Prediction{
+			Time: &timestamp.Timestamp{
 				Seconds: prediction.Seconds,
 				Nanos:   int32(prediction.Nanos),
 			},
@@ -73,8 +73,8 @@ func (s *Service) PublishTidalPredictions(when time.Time) error {
 		})
 	}
 
-	event := &api.TidePredicted{
-		Timestamp: &timestamp.Timestamp{
+	event := &tides.TidePredicted{
+		Time: &timestamp.Timestamp{
 			Seconds: when.Unix(),
 			Nanos:   int32(when.Nanosecond()),
 		},

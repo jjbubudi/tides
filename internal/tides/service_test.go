@@ -6,8 +6,8 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/timestamp"
+	"github.com/jjbubudi/protos-go/tides"
 	"github.com/jjbubudi/tides/pkg/observatory"
-	"github.com/jjbubudi/tides/api"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,7 +18,7 @@ func TestCreateService(t *testing.T) {
 
 func TestPublishRealTimeTidalData(t *testing.T) {
 	var publishedSubject string
-	var publishedData api.TideRecorded
+	var publishedData tides.TideRecorded
 
 	var tidalData = func(when time.Time) (observatory.TidalData, error) {
 		return observatory.TidalData{
@@ -37,8 +37,8 @@ func TestPublishRealTimeTidalData(t *testing.T) {
 	service := New(tidalData, nilPredictions, publisher)
 	service.PublishRealTimeTidalData(time.Unix(0, 0))
 
-	expectedData := api.TideRecorded{
-		Timestamp: &timestamp.Timestamp{
+	expectedData := tides.TideRecorded{
+		Time: &timestamp.Timestamp{
 			Seconds: 10000,
 			Nanos:   0,
 		},
@@ -51,7 +51,7 @@ func TestPublishRealTimeTidalData(t *testing.T) {
 
 func TestPublishTidalPredictions(t *testing.T) {
 	var publishedSubject string
-	var publishedData api.TidePredicted
+	var publishedData tides.TidePredicted
 
 	var tidalPredictions = func(when time.Time) ([]observatory.TidalData, error) {
 		return []observatory.TidalData{
@@ -72,14 +72,14 @@ func TestPublishTidalPredictions(t *testing.T) {
 	service := New(nilData, tidalPredictions, publisher)
 	service.PublishTidalPredictions(time.Unix(10000, 0))
 
-	expectedData := api.TidePredicted{
-		Timestamp: &timestamp.Timestamp{
+	expectedData := tides.TidePredicted{
+		Time: &timestamp.Timestamp{
 			Seconds: 10000,
 			Nanos:   0,
 		},
-		Predictions: []*api.TidePredicted_Prediction{
-			&api.TidePredicted_Prediction{
-				Timestamp: &timestamp.Timestamp{
+		Predictions: []*tides.TidePredicted_Prediction{
+			&tides.TidePredicted_Prediction{
+				Time: &timestamp.Timestamp{
 					Seconds: 15000,
 					Nanos:   0,
 				},

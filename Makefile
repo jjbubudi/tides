@@ -8,11 +8,6 @@ ifeq ($(ARCH), arm)
 	ARCH = armhf
 endif
 
-PROTO_TOOL = docker run --rm -v `pwd`:/work uber/prototool:1.7.0 prototool
-PROTO_PACKAGE := api
-PROTO_FILES := $(wildcard $(PROTO_PACKAGE)/*.proto)
-GENERATED_CODE := $(patsubst %.proto, %.pb.go, $(PROTO_FILES))
-
 DOCKER_IMAGE := jjbubudi/tides
 TAG ?= $(shell git describe --tags 2>/dev/null)
 COMMIT ?= $(shell git rev-parse --short HEAD)
@@ -22,7 +17,7 @@ ifneq ($(TAG),)
 endif
 
 .PHONY: build
-build: generate
+build:
 	@$(GO) build -o dist/tides cmd/main.go
 
 .PHONY: build-docker
@@ -48,23 +43,16 @@ push-manifest:
 		--target "$(DOCKER_IMAGE):$(VERSION)"
 
 .PHONY: run
-run: generate
+run:
 	@$(GO) run cmd/main.go
 
 .PHONY: ci
 ci: build test
 
 .PHONY: test
-test: generate
+test:
 	@$(GO) test ./...
-
-.PHONY: generate
-generate: $(GENERATED_CODE)
-
-%.pb.go: %.proto
-	@$(PROTO_TOOL) generate
 
 .PHONY: clean
 clean:
 	@rm -rf dist/
-	@rm -rf api/*.pb.go
