@@ -9,7 +9,7 @@ ifeq ($(ARCH), arm)
 endif
 
 DOCKER_IMAGE := jjbubudi/tides
-TAG ?= $(shell git describe --tags 2>/dev/null)
+TAG ?= $(shell git describe --tags --exact-match 2>/dev/null)
 COMMIT ?= $(shell git rev-parse --short HEAD)
 VERSION := $(COMMIT)
 ifneq ($(TAG),)
