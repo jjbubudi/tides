@@ -1,9 +1,0 @@
-protoc:
-  version: 3.7.1
-generate:
-  go_options:
-    import_path: github.com/jjbubudi/tides/api
-  plugins:
-    - name: go
-      type: go
-      output: .
