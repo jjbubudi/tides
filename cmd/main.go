@@ -2,48 +2,29 @@ package main
 
 import (
 	"log"
-	"net/http"
-	"os"
-	"time"
+	"strings"
 
-	"github.com/jasonlvhit/gocron"
-	"github.com/jjbubudi/tides/internal/tides"
-	"github.com/jjbubudi/tides/pkg/observatory"
-	stan "github.com/nats-io/go-nats-streaming"
+	"github.com/jjbubudi/tides/cmd/grpc"
+	"github.com/jjbubudi/tides/cmd/publisher"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-var hongKong, _ = time.LoadLocation("Asia/Hong_Kong")
-
 func main() {
-	natsCluster := os.Getenv("NATS_CLUSTER")
-	natsURL := os.Getenv("NATS_URL")
-	natsClientID := os.Getenv("NATS_CLIENT_ID")
-
-	nats, err := stan.Connect(natsCluster, natsClientID, stan.NatsURL(natsURL))
-	if err != nil {
-		log.Fatalf(`Error connecting to Nats! Cluster: "%s", URL: "%s", ClientID: "%s"`,
-			natsCluster, natsURL, natsClientID)
+	rootCommand := &cobra.Command{
+		Use: "tides",
 	}
-	defer nats.Close()
+	rootCommand.PersistentFlags().String("nats-url", "nats://127.0.0.1:4222", "Nats URL to connect to")
+	rootCommand.PersistentFlags().String("nats-cluster-id", "test-cluster", "Nats cluster ID")
+	rootCommand.PersistentFlags().String("nats-client-id", "test-client", "Nats client ID")
+	viper.BindPFlags(rootCommand.PersistentFlags())
+	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 
-	observatory := observatory.New(&http.Client{})
-	tidesService := tides.New(observatory.TidalDataAsOf, observatory.TidalPredictionsAsOf, nats.Publish)
+	rootCommand.AddCommand(publisher.NewPublisherCommand())
+	rootCommand.AddCommand(grpc.NewServerCommand())
 
-	gocron.ChangeLoc(hongKong)
-
-	gocron.Every(5).Minutes().Do(func() {
-		err := tidesService.PublishRealTimeTidalData(time.Now())
-		if err != nil {
-			log.Println(err)
-		}
-	})
-
-	gocron.Every(1).Day().At("01:00").Do(func() {
-		err := tidesService.PublishTidalPredictions(time.Now())
-		if err != nil {
-			log.Println(err)
-		}
-	})
-
-	<-gocron.Start()
+	if err := rootCommand.Execute(); err != nil {
+		log.Fatal(err)
+	}
 }

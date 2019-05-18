@@ -8,4 +8,4 @@ USER appuser
 
 COPY dist/tides /app/tides
 
-CMD ["/app/tides"]
+ENTRYPOINT ["/app/tides"]

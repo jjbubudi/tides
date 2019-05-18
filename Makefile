@@ -1,8 +1,8 @@
 export CGO_ENABLED = 0
+export GOOS = $(shell go env GOOS)
+export GOARCH = $(shell go env GOARCH)
 
 GO := go
-GOOS := $(shell go env GOOS)
-GOARCH := $(shell go env GOARCH)
 ARCH := $(GOARCH)
 ifeq ($(ARCH), arm)
 	ARCH = armhf
@@ -11,9 +11,9 @@ endif
 DOCKER_IMAGE := jjbubudi/tides
 TAG ?= $(shell git describe --tags --exact-match 2>/dev/null)
 COMMIT ?= $(shell git rev-parse --short HEAD)
-VERSION := $(COMMIT)
+VERSION = $(COMMIT)
 ifneq ($(TAG),)
-	VERSION := $(TAG)
+	VERSION = $(TAG)
 endif
 
 .PHONY: build
@@ -25,6 +25,7 @@ build-docker: build
 	@docker build --build-arg ARCH=$(ARCH) -t $(DOCKER_IMAGE):$(VERSION)-$(GOARCH) .
 	@docker tag $(DOCKER_IMAGE):$(VERSION)-$(GOARCH) $(DOCKER_IMAGE):$(VERSION)
 	@docker tag $(DOCKER_IMAGE):$(VERSION)-$(GOARCH) $(DOCKER_IMAGE):latest
+
 ifeq ($(PUSH), true)
 	@docker push $(DOCKER_IMAGE):$(VERSION)-$(GOARCH)
 endif
@@ -41,10 +42,6 @@ push-manifest:
 		--platforms linux/arm,linux/arm64,linux/amd64 \
 		--template "$(DOCKER_IMAGE):$(VERSION)-ARCH" \
 		--target "$(DOCKER_IMAGE):$(VERSION)"
-
-.PHONY: run
-run:
-	@$(GO) run cmd/main.go
 
 .PHONY: ci
 ci: build test

@@ -7,7 +7,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/jjbubudi/protos-go/tides"
-	"github.com/jjbubudi/tides/pkg/observatory"
+	"github.com/jjbubudi/tides/internal/observatory"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -1,25 +1,3 @@
 {
-    "go.useLanguageServer": true,
-    "go.alternateTools": {
-        "go-langserver": "gopls"
-    },
-    "go.languageServerExperimentalFeatures": {
-        "format": true,
-        "autoComplete": true,
-        "diagnostics": true,
-        "goToDefinition": true,
-        "hover": true,
-        "signatureHelp": true,
-        "goToTypeDefinition": true,
-        "documentSymbols": true,
-    },
-    "go.buildOnSave": "off",
-    "go.vetOnSave": "off",
-    "[go]": {
-        "editor.snippetSuggestions": "none",
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": true
-        },
-    }
+    "go.useLanguageServer": true
 }
