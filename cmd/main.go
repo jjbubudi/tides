@@ -4,8 +4,8 @@ import (
 	"log"
 	"strings"
 
-	"github.com/jjbubudi/tides/cmd/grpc"
 	"github.com/jjbubudi/tides/cmd/publisher"
+	"github.com/jjbubudi/tides/cmd/server"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -22,7 +22,7 @@ func main() {
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 
 	rootCommand.AddCommand(publisher.NewPublisherCommand())
-	rootCommand.AddCommand(grpc.NewServerCommand())
+	rootCommand.AddCommand(server.NewServerCommand())
 
 	if err := rootCommand.Execute(); err != nil {
 		log.Fatal(err)
