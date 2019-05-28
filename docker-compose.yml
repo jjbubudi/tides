@@ -33,6 +33,12 @@ services:
     ports:
       - "50051:50051"
 
+  proxy:
+    image: jjbubudi/grpc-web-proxy:v0.9.5
+    command: --allow_all_origins --backend_addr=server:50051 --run_tls_server=false --backend_tls=false
+    ports:
+      - "50052:8080"
+
   nats:
     image: nats-streaming:0.14.1
     command: -store file -dir /data
