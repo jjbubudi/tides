@@ -9,8 +9,10 @@ import (
 	"github.com/jjbubudi/tides/internal/observatory"
 )
 
-const tidesChannel = "tides"
-const tidesPredictionsChannel = "tides_predictions"
+const (
+	tidesChannel            = "tides.realtime"
+	tidesPredictionsChannel = "tides.predictions"
+)
 
 type tidalData func(time.Time) (observatory.TidalData, error)
 type tidalPredictions func(time.Time) ([]observatory.TidalData, error)

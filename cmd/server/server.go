@@ -67,10 +67,10 @@ func (s *store) GetPredictedTides() tides.TidePredicted {
 }
 
 func (s *store) Subscribe(nats stan.Conn) {
-	nats.Subscribe("tides", func(m *stan.Msg) {
+	nats.Subscribe("tides.realtime", func(m *stan.Msg) {
 		proto.Unmarshal(m.Data, &s.realtimeTides)
 	}, stan.StartWithLastReceived())
-	nats.Subscribe("tides_predictions", func(m *stan.Msg) {
+	nats.Subscribe("tides.predictions", func(m *stan.Msg) {
 		proto.Unmarshal(m.Data, &s.predictedTides)
 	}, stan.StartWithLastReceived())
 }

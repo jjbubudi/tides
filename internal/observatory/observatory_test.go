@@ -59,11 +59,11 @@ func TestGetPredictions(t *testing.T) {
 	april22, _ := time.Parse("2006-01-02 15:04", "2019-04-22 00:00")
 	predictions, _ := observatory.TidalPredictionsAsOf(april22)
 	expected := []TidalData{
-		TidalData{
+		{
 			Seconds: 1555941600,
 			Meters:  1.35,
 		},
-		TidalData{
+		{
 			Seconds: 1555945200,
 			Meters:  1.52,
 		},
