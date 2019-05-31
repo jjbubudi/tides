@@ -37,10 +37,6 @@ push-manifest:
 	@./manifest-tool push from-args \
 		--platforms linux/arm,linux/arm64,linux/amd64 \
 		--template "$(DOCKER_IMAGE):$(VERSION)-ARCH" \
-		--target "$(DOCKER_IMAGE):latest"
-	@./manifest-tool push from-args \
-		--platforms linux/arm,linux/arm64,linux/amd64 \
-		--template "$(DOCKER_IMAGE):$(VERSION)-ARCH" \
 		--target "$(DOCKER_IMAGE):$(VERSION)"
 
 .PHONY: ci

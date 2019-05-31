@@ -26,7 +26,7 @@ jobs:
       script: make ci
 
     - stage: release
-      if: type = push OR tag IS present
+      if: tag IS present
       script:
         - make build-docker GOOS=linux GOARCH=amd64 PUSH=true
         - make build-docker GOOS=linux GOARCH=arm64 PUSH=true

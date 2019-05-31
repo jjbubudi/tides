@@ -45,7 +45,7 @@ func TestPublishRealTimeTidalData(t *testing.T) {
 		Meters: 2.0,
 	}
 
-	assert.Equal(t, "tides", publishedSubject)
+	assert.Equal(t, "tides.realtime", publishedSubject)
 	assert.Equal(t, expectedData, publishedData)
 }
 
@@ -55,7 +55,7 @@ func TestPublishTidalPredictions(t *testing.T) {
 
 	var tidalPredictions = func(when time.Time) ([]observatory.TidalData, error) {
 		return []observatory.TidalData{
-			observatory.TidalData{
+			{
 				Seconds: 15000,
 				Nanos:   0,
 				Meters:  2.0,
@@ -78,7 +78,7 @@ func TestPublishTidalPredictions(t *testing.T) {
 			Nanos:   0,
 		},
 		Predictions: []*tides.TidePredicted_Prediction{
-			&tides.TidePredicted_Prediction{
+			{
 				Time: &timestamp.Timestamp{
 					Seconds: 15000,
 					Nanos:   0,
@@ -88,7 +88,7 @@ func TestPublishTidalPredictions(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, "tides_predictions", publishedSubject)
+	assert.Equal(t, "tides.predictions", publishedSubject)
 	assert.Equal(t, expectedData, publishedData)
 }
 
