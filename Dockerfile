@@ -1,7 +1,7 @@
 ARG ARCH
 FROM multiarch/alpine:${ARCH}-v3.9
 
-RUN apk add --update tzdata && \
+RUN apk add --update tzdata ca-certificates && \
     rm -rf /var/cache/apk/*
 
 RUN addgroup -S appgroup && \
