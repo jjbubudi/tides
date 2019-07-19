@@ -99,6 +99,7 @@ func (s *server) PredictedTides(ctx context.Context, req *tides.PredictedTidesRe
 	}
 
 	return &tides.PredictedTidesResponse{
+		Time:        t.GetTime(),
 		Predictions: data,
 	}, nil
 }
