@@ -43,8 +43,8 @@ github.com/jasonlvhit/gocron v0.0.0-20190402024347-5bcdd9fcfa9b h1:71OQnFj9tBPdc
 github.com/jasonlvhit/gocron v0.0.0-20190402024347-5bcdd9fcfa9b/go.mod h1:rwi/esz/h+4oWLhbWWK7f6dtmgLzxeZhnwGr7MCsTNk=
 github.com/jjbubudi/go-nats-streaming v0.4.3-0.20190420024036-3a359ddc011c h1:e69ZVJGtbe+EPLa0UI2bcdASNv/f9UkimelliBgz/bA=
 github.com/jjbubudi/go-nats-streaming v0.4.3-0.20190420024036-3a359ddc011c/go.mod h1:pevejOzUVyD/s1pr0Ddy9iEFy9WpWH5/K3zJVWGjXZc=
-github.com/jjbubudi/protos-go v0.0.0-20190513145009-4dcc2b0121af h1:fb9jwKABgdLeukJK3oVChX5mAs47amdD76w/sFRu9+s=
-github.com/jjbubudi/protos-go v0.0.0-20190513145009-4dcc2b0121af/go.mod h1:jHBzJ11mU3JT9xHUlksSd0K2qTIE3S6BUupuC8XFhYs=
+github.com/jjbubudi/protos-go v0.0.0-20190719140713-b14cb8c44ab5 h1:lGm2co1vGLdO7biNHhXgMhdB8wVO42NvyiS2nfuyL9g=
+github.com/jjbubudi/protos-go v0.0.0-20190719140713-b14cb8c44ab5/go.mod h1:jHBzJ11mU3JT9xHUlksSd0K2qTIE3S6BUupuC8XFhYs=
 github.com/kisielk/errcheck v1.1.0/go.mod h1:EZBBE59ingxPouuu3KfxchcWSUPOHkagtvWXihfKN4Q=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/lib/pq v1.1.0 h1:/5u4a+KGJptBRqGzPvYQL9p0d/tPR4S31+Tnzj9lEO4=

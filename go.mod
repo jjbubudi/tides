@@ -5,7 +5,7 @@ go 1.12
 require (
 	github.com/golang/protobuf v1.3.1
 	github.com/jasonlvhit/gocron v0.0.0-20190402024347-5bcdd9fcfa9b
-	github.com/jjbubudi/protos-go v0.0.0-20190513145009-4dcc2b0121af
+	github.com/jjbubudi/protos-go v0.0.0-20190719140713-b14cb8c44ab5
 	github.com/nats-io/go-nats-streaming v0.4.2
 	github.com/spf13/cobra v0.0.4-0.20190321000552-67fc4837d267
 	github.com/spf13/viper v1.3.2
