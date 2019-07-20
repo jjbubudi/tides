@@ -8,7 +8,7 @@ import (
 	"github.com/jasonlvhit/gocron"
 	"github.com/jjbubudi/tides/internal/observatory"
 	"github.com/jjbubudi/tides/internal/tides"
-	stan "github.com/nats-io/go-nats-streaming"
+	stan "github.com/nats-io/stan.go"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

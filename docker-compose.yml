@@ -40,7 +40,7 @@ services:
       - "50052:8080"
 
   nats:
-    image: nats-streaming:0.14.1
+    image: nats-streaming:0.15.1
     command: -store file -dir /data
     volumes:
       - nats-data:/data
