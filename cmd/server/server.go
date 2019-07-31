@@ -24,7 +24,14 @@ func NewServerCommand() *cobra.Command {
 			natsClusterID := viper.GetString("nats-cluster-id")
 			natsClientID := viper.GetString("nats-client-id")
 			bindAddress := viper.GetString("bind-address")
-			nats, err := stan.Connect(natsClusterID, natsClientID, stan.NatsURL(natsURL))
+			nats, err := stan.Connect(
+				natsClusterID,
+				natsClientID,
+				stan.NatsURL(natsURL),
+				stan.SetConnectionLostHandler(func(conn stan.Conn, err error) {
+					log.Fatal(err)
+				}),
+			)
 			if err != nil {
 				log.Fatal(err)
 			}
