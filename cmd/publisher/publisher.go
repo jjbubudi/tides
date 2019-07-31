@@ -23,7 +23,14 @@ func NewPublisherCommand() *cobra.Command {
 			natsURL := viper.GetString("nats-url")
 			natsClusterID := viper.GetString("nats-cluster-id")
 			natsClientID := viper.GetString("nats-client-id")
-			nats, err := stan.Connect(natsClusterID, natsClientID, stan.NatsURL(natsURL))
+			nats, err := stan.Connect(
+				natsClusterID,
+				natsClientID,
+				stan.NatsURL(natsURL),
+				stan.SetConnectionLostHandler(func(conn stan.Conn, err error) {
+					log.Fatal(err)
+				}),
+			)
 			if err != nil {
 				log.Fatal(err)
 			}
