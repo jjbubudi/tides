@@ -1,6 +1,6 @@
 # Tides
 
-[![Travis Build Status](https://travis-ci.org/jjbubudi/tides.svg?branch=master)](https://travis-ci.org/jjbubudi/tides)
+[![Build Status](https://cloud.drone.io/api/badges/jjbubudi/tides/status.svg)](https://cloud.drone.io/jjbubudi/tides)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jjbubudi/tides)](https://goreportcard.com/report/github.com/jjbubudi/tides)
 
 This service fetches real time tidal data from the Hong Kong Observatory.
