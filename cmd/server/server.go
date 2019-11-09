@@ -7,44 +7,69 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/jjbubudi/protos-go/tides"
+	"github.com/jjbubudi/tides/internal"
 	stan "github.com/nats-io/stan.go"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	"github.com/urfave/cli"
 	"google.golang.org/grpc"
 )
 
+const (
+	pNatsURL       = "nats-url"
+	pNatsClusterID = "nats-cluster-id"
+	pNatsClientID  = "nats-client-id"
+	pBindAddress   = "bind-address"
+)
+
 // NewServerCommand creates a new server command
-func NewServerCommand() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "server",
-		Short: "Start the server",
-		Long:  "Start the server",
-		Run: func(cmd *cobra.Command, args []string) {
-			natsURL := viper.GetString("nats-url")
-			natsClusterID := viper.GetString("nats-cluster-id")
-			natsClientID := viper.GetString("nats-client-id")
-			bindAddress := viper.GetString("bind-address")
-			nats, err := stan.Connect(
-				natsClusterID,
-				natsClientID,
-				stan.NatsURL(natsURL),
-				stan.SetConnectionLostHandler(func(conn stan.Conn, err error) {
-					log.Fatal(err)
-				}),
-			)
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer nats.Close()
-			runServer(nats, bindAddress)
+func NewServerCommand() cli.Command {
+	return cli.Command{
+		Name:  "server",
+		Usage: "Server serving tidal data queries",
+		Subcommands: []cli.Command{
+			cli.Command{
+				Name:  "start",
+				Usage: "Start the server",
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:     pNatsURL,
+						EnvVar:   internal.AutoEnv(pNatsURL),
+						Required: true,
+					},
+					cli.StringFlag{
+						Name:     pNatsClusterID,
+						EnvVar:   internal.AutoEnv(pNatsClusterID),
+						Required: true,
+					},
+					cli.StringFlag{
+						Name:     pNatsClientID,
+						EnvVar:   internal.AutoEnv(pNatsClientID),
+						Required: true,
+					},
+					cli.StringFlag{
+						Name:     pBindAddress,
+						EnvVar:   internal.AutoEnv(pBindAddress),
+						Value:    "0.0.0.0:50051",
+						Required: false,
+					},
+				},
+				Action: func(c *cli.Context) error {
+					nats, err := internal.ConnectToNats(
+						c.String(pNatsClusterID),
+						c.String(pNatsClientID),
+						c.String(pNatsURL),
+					)
+					if err != nil {
+						return err
+					}
+					defer nats.Close()
+					return startServer(nats, c.String(pBindAddress))
+				},
+			},
 		},
 	}
-	cmd.Flags().String("bind-address", "0.0.0.0:50051", "Address to bind the server to")
-	viper.BindPFlags(cmd.Flags())
-	return cmd
 }
 
-func runServer(nats stan.Conn, bindAddress string) {
+func startServer(nats stan.Conn, bindAddress string) error {
 	store := &store{}
 	store.Subscribe(nats)
 
@@ -57,7 +82,8 @@ func runServer(nats stan.Conn, bindAddress string) {
 	tides.RegisterTidesServiceServer(g, &server{
 		store: store,
 	})
-	g.Serve(lis)
+
+	return g.Serve(lis)
 }
 
 type store struct {

@@ -1,20 +1,5 @@
 version: '3'
 services:
-  publisher:
-    image: golang:1.12.5
-    depends_on:
-      - nats
-    volumes:
-      - .:/app
-      - go-mod-cache:/go/pkg/mod
-      - go-cache:/root/.cache/go-build
-    working_dir: /app
-    command: go run cmd/main.go publisher
-    environment:
-      NATS_CLUSTER_ID: test-cluster
-      NATS_URL: nats://nats:4222
-      NATS_CLIENT_ID: publisher
-
   server:
     image: golang:1.12.5
     depends_on:
@@ -24,7 +9,7 @@ services:
       - go-mod-cache:/go/pkg/mod
       - go-cache:/root/.cache/go-build
     working_dir: /app
-    command: go run cmd/main.go server
+    command: go run cmd/main.go server start
     environment:
       NATS_CLUSTER_ID: test-cluster
       NATS_URL: nats://nats:4222
@@ -40,8 +25,10 @@ services:
       - "50052:8080"
 
   nats:
-    image: nats-streaming:0.15.1
+    image: nats-streaming:0.16.2
     command: -store file -dir /data
+    ports:
+      - "4222:4222"
     volumes:
       - nats-data:/data
 

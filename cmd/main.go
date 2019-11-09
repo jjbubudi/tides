@@ -2,29 +2,23 @@ package main
 
 import (
 	"log"
-	"strings"
+	"os"
 
-	"github.com/jjbubudi/tides/cmd/publisher"
+	"github.com/jjbubudi/tides/cmd/fetch"
 	"github.com/jjbubudi/tides/cmd/server"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	"github.com/urfave/cli"
 )
 
 func main() {
-	rootCommand := &cobra.Command{
-		Use: "tides",
+	app := cli.NewApp()
+	app.Name = "tides"
+	app.HelpName = "tides"
+	app.Usage = "Fetches tidal data from the Hong Kong Observatory"
+	app.Commands = []cli.Command{
+		server.NewServerCommand(),
+		fetch.NewFetchCommand(),
 	}
-	rootCommand.PersistentFlags().String("nats-url", "nats://127.0.0.1:4222", "Nats URL to connect to")
-	rootCommand.PersistentFlags().String("nats-cluster-id", "test-cluster", "Nats cluster ID")
-	rootCommand.PersistentFlags().String("nats-client-id", "test-client", "Nats client ID")
-	viper.BindPFlags(rootCommand.PersistentFlags())
-	viper.AutomaticEnv()
-	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
-
-	rootCommand.AddCommand(publisher.NewPublisherCommand())
-	rootCommand.AddCommand(server.NewServerCommand())
-
-	if err := rootCommand.Execute(); err != nil {
+	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
 }
