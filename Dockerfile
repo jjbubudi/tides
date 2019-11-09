@@ -1,5 +1,4 @@
-ARG ARCH
-FROM multiarch/alpine:${ARCH}-v3.9
+FROM alpine:3.10.3
 
 RUN apk add --update tzdata ca-certificates && \
     rm -rf /var/cache/apk/*
